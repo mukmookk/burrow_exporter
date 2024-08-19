@@ -183,6 +183,26 @@ func (be *BurrowExporter) scrape() {
 		return
 	}
 
+	log.Info("Resetting all relevant gauge metrics to clear previous values before starting a new scrape cycle")
+	if !be.skipPartitionLag {
+			KafkaConsumerPartitionLag.Reset()
+	}
+	if !be.skipPartitionCurrentOffset {
+			KafkaConsumerPartitionCurrentOffset.Reset()
+	}
+	if !be.skipPartitionStatus {
+			KafkaConsumerPartitionCurrentStatus.Reset()
+	}
+	if !be.skipPartitionMaxOffset {
+			KafkaConsumerPartitionMaxOffset.Reset()
+	}
+	if !be.skipTotalLag {
+			KafkaConsumerTotalLag.Reset()
+	}
+	if !be.skipConsumerStatus {
+			KafkaConsumerStatus.Reset()
+	}
+
 	wg := sync.WaitGroup{}
 
 	for _, cluster := range clusters.Clusters {
